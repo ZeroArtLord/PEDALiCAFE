@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function hasRole(roles) {
+      return isAuthenticated()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in roles;
+    }
+
+    function isSelf(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow read: if hasRole(['admin', 'manager']) || isSelf(userId);
+      allow create: if hasRole(['admin']);
+      allow update: if hasRole(['admin']) || request.auth.uid == userId;
+      allow delete: if false;
+    }
+
+    match /settings/{documentId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager']);
+    }
+
+    match /customers/{customerId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'sales']);
+    }
+
+    match /products/{productId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'inventory', 'production', 'sales']);
+    }
+
+    match /productionBatches/{batchId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'production']);
+    }
+
+    match /invoices/{invoiceId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'sales']);
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'sales']);
+    }
+
+    match /stockMovements/{movementId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'inventory', 'production', 'sales']);
+    }
+  }
+}

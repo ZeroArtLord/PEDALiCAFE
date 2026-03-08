@@ -1,0 +1,35 @@
+{
+  "name": "sistema-gestion-pulpas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.scripts.json",
+    "seed:preview": "tsx scripts/preview-seed.ts",
+    "seed:firestore": "tsx scripts/seed-firestore.ts",
+    "create:master-user": "tsx scripts/create-master-user.ts",
+    "create:staff-user": "tsx scripts/create-staff-user.ts",
+    "backfill:soft-delete": "tsx scripts/backfill-soft-delete.ts"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.87.4",
+    "clsx": "^2.1.1",
+    "firebase": "^12.0.0",
+    "firebase-admin": "^13.5.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.1.4",
+    "tailwindcss": "^4.2.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vite": "^7.3.1"
+  }
+}
