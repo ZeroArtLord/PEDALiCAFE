@@ -36,7 +36,7 @@ export function RootLayout() {
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/85 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-brand)]">
             <span className="pulse-dot" />
-            PEDAiCAFE
+            PEDALiCAFE
           </div>
           <h1 className="mt-3 font-display text-3xl font-semibold leading-tight text-[var(--color-ink)]">
             Sistema de

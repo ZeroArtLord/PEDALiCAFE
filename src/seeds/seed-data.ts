@@ -19,7 +19,7 @@ import {
 } from "../domain/factories.js";
 
 export const seedGeneralSettings: GeneralSettings = {
-  businessName: "PEDAiCAFE",
+  businessName: "PEDALiCAFE",
   defaultCurrency: "USD",
   supportedCurrencies: ["USD", "VES"],
   timezone: "America/Caracas",

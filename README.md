@@ -1,4 +1,4 @@
-# PEDAiCAFE
+# PEDALiCAFE
 
 Base inicial del MVP de un ERP/CRM web para un negocio pequeno en Venezuela, orientado a React + Firebase + Firestore. Esta entrega deja lista la capa de datos, configuracion base y un frontend React mobile-first inicial.
 
@@ -70,6 +70,14 @@ npm run seed:firestore
 
 ```bash
 npm run dev
+```
+
+## Publicar en GitHub Pages
+
+Este proyecto usa Vite con `base` configurado para `PEDALiCAFE`. Para publicar:
+
+```bash
+npm run deploy
 ```
 
 ## Crear usuario maestro

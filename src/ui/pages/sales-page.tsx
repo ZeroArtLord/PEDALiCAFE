@@ -477,7 +477,7 @@ export function SalesPage() {
         </thead>
         <tbody>${paymentRows}</tbody>
       </table>
-      <p class="footer">Documento generado desde PEDAiCAFE.</p>`
+      <p class="footer">Documento generado desde PEDALiCAFE.</p>`
     );
   }
 

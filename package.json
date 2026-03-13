@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.scripts.json",
     "seed:preview": "tsx scripts/preview-seed.ts",
     "seed:firestore": "tsx scripts/seed-firestore.ts",
@@ -31,6 +33,7 @@
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.1.4",
+    "gh-pages": "^6.3.0",
     "tailwindcss": "^4.2.1",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",

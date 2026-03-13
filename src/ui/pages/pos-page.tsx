@@ -136,7 +136,7 @@ export function PosPage() {
                 Menu
               </p>
               <h2 className="mt-2 font-display text-2xl font-semibold text-[var(--color-ink)]">
-                Productos PEDAiCAFE
+                Productos PEDALiCAFE
               </h2>
             </div>
             <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-2 text-xs font-semibold text-orange-800">
