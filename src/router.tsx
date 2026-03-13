@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 
 import { RedirectIfAuthenticated, RequireAuth, RequireRoles } from "./auth/route-guards.js";
 import { RouteFallback } from "./ui/components/route-fallback.js";
@@ -52,7 +52,7 @@ function withSuspense(node: React.ReactNode) {
   return <Suspense fallback={<RouteFallback />}>{node}</Suspense>;
 }
 
-export const router = createBrowserRouter([
+export const router = createHashRouter([
   {
     element: <RedirectIfAuthenticated />,
     children: [
