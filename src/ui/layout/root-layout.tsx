@@ -96,9 +96,9 @@ export function RootLayout() {
         </div>
       </aside>
 
-      <div className="min-w-0 px-4 pb-28 pt-4 sm:px-6 lg:px-10 lg:pb-10 lg:pt-8">
-        <header className="topbar-shell glass-card reveal rounded-[30px] px-5 py-4">
-          <div className="flex items-start justify-between gap-4">
+      <div className="content-with-topbar min-w-0 px-4 pb-28 pt-24 sm:px-6 lg:px-10 lg:pb-10 lg:pt-28">
+        <header className="topbar-shell topbar-fixed glass-card reveal rounded-[30px] px-5 py-4">
+          <div className="flex flex-col items-start justify-between gap-4 lg:flex-row">
             <div>
               <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-brand)]">
                 Vista activa
@@ -106,18 +106,18 @@ export function RootLayout() {
               <h2 className="mt-1 font-display text-2xl font-semibold text-[var(--color-ink)] sm:text-3xl">
                 {activeLabel}
               </h2>
-              <p className="mt-2 text-sm text-[var(--color-ink-soft)]">
+              <p className="mt-2 hidden text-sm text-[var(--color-ink-soft)] sm:block">
                 Panel operativo mobile-first para ventas, inventario, produccion y cartera.
               </p>
             </div>
-            <div className="flex shrink-0 flex-col gap-2">
-              <div className="rounded-2xl bg-[var(--color-brand-soft)] px-4 py-3 text-right">
+            <div className="flex w-full shrink-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-end lg:w-auto lg:flex-col">
+              <div className="rounded-2xl bg-[var(--color-brand-soft)] px-4 py-3 text-left sm:text-right">
                 <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-brand-deep)]">
                   Monedas
                 </p>
                 <p className="mt-1 text-sm font-medium text-[var(--color-brand-deep)]">USD / VES</p>
               </div>
-              <div className="rounded-2xl bg-white/82 px-4 py-3 text-right ring-1 ring-[var(--color-line)]">
+              <div className="rounded-2xl bg-white/82 px-4 py-3 text-left ring-1 ring-[var(--color-line)] sm:text-right">
                 <p className="text-xs uppercase tracking-[0.24em] text-[var(--color-ink-soft)]">
                   Sesion
                 </p>
