@@ -136,7 +136,7 @@ export function InventoryPage() {
       const payload: Product = {
         sku: formState.sku.trim().toUpperCase(),
         name: formState.name.trim(),
-        category: "pulpa",
+        category: "cafe",
         flavor: formState.flavor.trim().toLowerCase(),
         unit: "kg",
         presentation: formState.presentation.trim(),
@@ -477,10 +477,10 @@ export function InventoryPage() {
                           {row.product}
                         </h2>
                         <p className="mt-2 text-sm text-[var(--color-ink-soft)]">
-                          {row.sku} · {row.presentation} · {row.flavor}
+                          {row.sku} - {row.presentation} - {row.flavor}
                         </p>
                         <p className="mt-1 text-sm text-[var(--color-ink-soft)]">
-                          Costo base: {formatUsd(row.costUsd)} · Venta: {formatUsd(row.priceUsd)}
+                          Costo base: {formatUsd(row.costUsd)} - Venta: {formatUsd(row.priceUsd)}
                         </p>
                       </div>
                       <span
@@ -527,7 +527,7 @@ export function InventoryPage() {
                         </span>
                       </div>
                       <p className="mt-3 text-sm text-[var(--color-ink-soft)]">
-                        {formatVes(row.costVes)} costo · {formatVes(row.priceVes)} venta
+                        {formatVes(row.costVes)} costo - {formatVes(row.priceVes)} venta
                       </p>
                       <div className="progress-rail mt-3">
                         <div

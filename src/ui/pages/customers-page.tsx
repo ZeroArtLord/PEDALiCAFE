@@ -73,7 +73,7 @@ function sanitizePhone(phone: string) {
 
 function buildWhatsAppLink(customerName: string, phone: string, debtUsd: number, exchangeRate: number) {
   const debtVes = debtUsd * exchangeRate;
-  const message = `Hola ${customerName}, tu pedido de pulpa esta listo. El total a pagar es ${formatUsd(
+  const message = `Hola ${customerName}, tu pedido de cafe esta listo. El total a pagar es ${formatUsd(
     debtUsd
   )} (o su equivalente en Bs: ${formatVes(debtVes)}).`;
 
@@ -514,7 +514,7 @@ export function CustomersPage() {
                     </div>
 
                     <div className="rounded-[26px] border border-[var(--color-line)] bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(245,255,249,0.85))] px-4 py-4 text-sm leading-6 text-[var(--color-ink-soft)]">
-                      Mensaje listo: Hola {customer.name}, tu pedido de pulpa esta listo. El total a pagar es{" "}
+                      Mensaje listo: Hola {customer.name}, tu pedido de cafe esta listo. El total a pagar es{" "}
                       {formatUsd(customer.pendingDebtUsd)} (o su equivalente en Bs: {formatVes(customer.pendingDebtVes)}).
                     </div>
 

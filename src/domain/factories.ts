@@ -39,6 +39,7 @@ export function buildInvoiceItem(input: {
 
 export function buildInvoice(params: {
   invoiceNumber: string;
+  customerDocumentId: string;
   customer: Customer;
   items: InvoiceItem[];
   saleType: Invoice["saleType"];
@@ -62,7 +63,7 @@ export function buildInvoice(params: {
 
   return {
     invoiceNumber: params.invoiceNumber,
-    customerId: params.customer.code,
+    customerId: params.customerDocumentId,
     customerSnapshot: {
       fullName: params.customer.fullName,
       phone: params.customer.phone
@@ -96,6 +97,7 @@ export function buildInvoice(params: {
 
 export function buildProductionBatch(params: {
   batchNumber: string;
+  productDocumentId: string;
   product: Product;
   fruitType: string;
   inputWeightKg: number;
@@ -120,7 +122,7 @@ export function buildProductionBatch(params: {
 
   return {
     batchNumber: params.batchNumber,
-    productId: params.product.sku,
+    productId: params.productDocumentId,
     productNameSnapshot: params.product.name,
     rawMaterial: {
       fruitType: params.fruitType,

@@ -20,9 +20,16 @@ import type {
   ExchangeRateSettings,
   GeneralSettings,
   Invoice,
+  InventoryItem,
+  MenuItem,
   Payment,
   Product,
   ProductionBatch,
+  Sale,
+  Supplier,
+  SupplierBill,
+  Expense,
+  Campaign,
   StockMovement
 } from "../domain/types.js";
 import { db } from "./firebase.js";
@@ -30,6 +37,13 @@ import { db } from "./firebase.js";
 type CollectionName =
   | "users"
   | "customers"
+  | "inventoryItems"
+  | "menuItems"
+  | "sales"
+  | "suppliers"
+  | "supplierBills"
+  | "expenses"
+  | "campaigns"
   | "products"
   | "productionBatches"
   | "invoices"
@@ -39,6 +53,13 @@ type CollectionName =
 type CollectionMap = {
   users: AppUser;
   customers: Customer;
+  inventoryItems: InventoryItem;
+  menuItems: MenuItem;
+  sales: Sale;
+  suppliers: Supplier;
+  supplierBills: SupplierBill;
+  expenses: Expense;
+  campaigns: Campaign;
   products: Product;
   productionBatches: ProductionBatch;
   invoices: Invoice;
@@ -408,5 +429,137 @@ export async function registerPaymentAndApplyEffects(params: {
     });
 
     transaction.set(paymentRef, withSoftDeleteFields(payment));
+  });
+}
+
+export async function createSaleAndConsumeInventory(params: {
+  saleId: string;
+  invoiceNumber: string;
+  customerDocumentId: string;
+  customerSnapshot: { fullName: string; phone: string };
+  items: Array<{ menuItemDocumentId: string; quantity: number }>;
+  payment: {
+    method: Sale["payment"]["method"];
+    paidUSD: number;
+    paidVES: number;
+  };
+  exchangeRate: number;
+  createdBy: string;
+  issuedAt: string;
+}): Promise<void> {
+  const saleRef = doc(db, COLLECTIONS.sales, params.saleId);
+
+  await runTransaction(db, async (transaction) => {
+    let subtotalUSD = 0;
+    let subtotalVES = 0;
+
+    const menuSnapshots = await Promise.all(
+      params.items.map((item) =>
+        transaction.get(doc(db, COLLECTIONS.menuItems, item.menuItemDocumentId))
+      )
+    );
+
+    const lineItems = params.items.map((item, index) => {
+      const menuSnapshot = menuSnapshots[index];
+
+      if (!menuSnapshot.exists()) {
+        throw new Error(`No se encontro el menu item: ${item.menuItemDocumentId}`);
+      }
+
+      const menuItem = menuSnapshot.data() as MenuItem;
+      const unitPriceUSD = menuItem.price.saleUSD;
+      const unitPriceVES = menuItem.price.saleVES;
+      const subtotalLineUSD = Number((unitPriceUSD * item.quantity).toFixed(2));
+      const subtotalLineVES = Number((unitPriceVES * item.quantity).toFixed(2));
+
+      subtotalUSD += subtotalLineUSD;
+      subtotalVES += subtotalLineVES;
+
+      return {
+        menuItemId: item.menuItemDocumentId,
+        sku: menuItem.sku,
+        name: menuItem.name,
+        quantity: item.quantity,
+        unitPriceUSD,
+        unitPriceVES,
+        subtotalUSD: subtotalLineUSD,
+        subtotalVES: subtotalLineVES,
+        recipe: menuItem.recipe
+      };
+    });
+
+    for (const line of lineItems) {
+      for (const recipeItem of line.recipe) {
+        const inventoryRef = doc(db, COLLECTIONS.inventoryItems, recipeItem.inventoryItemId);
+        const inventorySnapshot = await transaction.get(inventoryRef);
+
+        if (!inventorySnapshot.exists()) {
+          throw new Error(`No se encontro el insumo: ${recipeItem.inventoryItemId}`);
+        }
+
+        const inventory = inventorySnapshot.data() as InventoryItem;
+        const toConsume = Number((recipeItem.quantity * line.quantity).toFixed(2));
+
+        if (inventory.stock.available < toConsume) {
+          throw new Error(
+            `Stock insuficiente de ${inventory.name}. Disponible: ${inventory.stock.available}`
+          );
+        }
+
+        const nextCurrent = Number((inventory.stock.current - toConsume).toFixed(2));
+        const nextAvailable = Number((inventory.stock.available - toConsume).toFixed(2));
+
+        transaction.update(inventoryRef, {
+          stock: {
+            ...inventory.stock,
+            current: nextCurrent,
+            available: nextAvailable
+          },
+          updatedAt: params.issuedAt
+        });
+      }
+    }
+
+    const totalUSD = Number(subtotalUSD.toFixed(2));
+    const totalVES = Number(subtotalVES.toFixed(2));
+    const pendingUSD = Number((totalUSD - params.payment.paidUSD).toFixed(2));
+    const pendingVES = Number((totalVES - params.payment.paidVES).toFixed(2));
+    const paymentStatus: Sale["payment"]["status"] =
+      pendingUSD <= 0 && pendingVES <= 0
+        ? "paid"
+        : params.payment.paidUSD > 0 || params.payment.paidVES > 0
+          ? "partial"
+          : "pending";
+
+    transaction.set(saleRef, {
+      invoiceNumber: params.invoiceNumber,
+      customerId: params.customerDocumentId,
+      customerSnapshot: params.customerSnapshot,
+      items: lineItems.map(({ recipe, ...rest }) => rest),
+      totals: {
+        subtotalUSD: totalUSD,
+        subtotalVES: totalVES,
+        discountUSD: 0,
+        discountVES: 0,
+        taxUSD: 0,
+        taxVES: 0,
+        totalUSD,
+        totalVES,
+        exchangeRate: params.exchangeRate
+      },
+      payment: {
+        method: params.payment.method,
+        status: paymentStatus,
+        paidUSD: params.payment.paidUSD,
+        paidVES: params.payment.paidVES,
+        pendingUSD,
+        pendingVES
+      },
+      status: "issued",
+      issuedAt: params.issuedAt,
+      createdBy: params.createdBy,
+      isActive: true,
+      deletedAt: null
+    } as Sale);
   });
 }

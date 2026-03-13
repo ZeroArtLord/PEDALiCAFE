@@ -56,7 +56,7 @@ export function LoginPage() {
             <input
               className="w-full rounded-2xl border border-[var(--color-line)] bg-white/80 px-4 py-3 outline-none placeholder:text-slate-400"
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="admin@pulpa.local"
+              placeholder="admin@pedaicafe.local"
               type="email"
               value={email}
             />
@@ -67,7 +67,7 @@ export function LoginPage() {
             <input
               className="w-full rounded-2xl border border-[var(--color-line)] bg-white/80 px-4 py-3 outline-none placeholder:text-slate-400"
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="••••••••"
+              placeholder="********"
               type="password"
               value={password}
             />

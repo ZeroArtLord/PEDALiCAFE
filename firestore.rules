@@ -31,6 +31,41 @@ service cloud.firestore {
       allow write: if hasRole(['admin', 'manager', 'sales']);
     }
 
+    match /inventoryItems/{inventoryItemId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'inventory']);
+    }
+
+    match /menuItems/{menuItemId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager']);
+    }
+
+    match /sales/{saleId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'sales']);
+    }
+
+    match /suppliers/{supplierId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager']);
+    }
+
+    match /supplierBills/{billId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager']);
+    }
+
+    match /expenses/{expenseId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager']);
+    }
+
+    match /campaigns/{campaignId} {
+      allow read: if isAuthenticated();
+      allow write: if hasRole(['admin', 'manager', 'sales']);
+    }
+
     match /products/{productId} {
       allow read: if isAuthenticated();
       allow write: if hasRole(['admin', 'manager', 'inventory', 'production', 'sales']);

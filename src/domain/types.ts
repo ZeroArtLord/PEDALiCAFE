@@ -12,6 +12,8 @@ export type PaymentMethod =
   | "transfer_ves"
   | "zelle"
   | "mixed";
+export type CampaignStatus = "draft" | "scheduled" | "sent";
+export type CampaignChannel = "sms" | "whatsapp" | "email";
 export type PurchaseDay =
   | "monday"
   | "tuesday"
@@ -79,6 +81,15 @@ export interface CustomerStats {
   lastPurchaseAt: string | null;
 }
 
+export interface CustomerMarketing {
+  segment: "new" | "frequent" | "vip" | "inactive";
+  visitsPerMonth: number;
+  lastVisitAt: string | null;
+  preferredItems: string[];
+  avgTicketUSD: number;
+  lifetimeValueUSD: number;
+}
+
 export interface Customer extends TimestampFields, SoftDeleteFields {
   code: string;
   fullName: string;
@@ -91,6 +102,7 @@ export interface Customer extends TimestampFields, SoftDeleteFields {
   purchaseDays: PurchaseDay[];
   credit: CustomerCredit;
   stats: CustomerStats;
+  marketing?: CustomerMarketing;
   status: EntityStatus;
   notes: string;
 }
@@ -109,10 +121,109 @@ export interface ProductPrice {
   saleVES: number;
 }
 
+export interface InventoryItem extends TimestampFields, SoftDeleteFields {
+  sku: string;
+  name: string;
+  category: "coffee" | "dairy" | "syrup" | "cup" | "other";
+  unit: "g" | "ml" | "unit";
+  stock: ProductStock;
+  cost: ProductCost;
+  supplier?: {
+    name: string;
+    lastInvoiceRef: string;
+  };
+  status: EntityStatus;
+}
+
+export interface MenuRecipeItem {
+  inventoryItemId: string;
+  nameSnapshot: string;
+  unit: "g" | "ml" | "unit";
+  quantity: number;
+  costUSD?: number;
+}
+
+export interface MenuItem extends TimestampFields, SoftDeleteFields {
+  sku: string;
+  name: string;
+  category: "coffee" | "drink" | "food";
+  price: ProductPrice;
+  recipe: MenuRecipeItem[];
+  tags: string[];
+  status: EntityStatus;
+}
+
+export interface Supplier extends TimestampFields, SoftDeleteFields {
+  name: string;
+  phone: string;
+  email: string;
+  status: EntityStatus;
+  notes: string;
+}
+
+export interface SupplierBill extends SoftDeleteFields {
+  supplierId: string;
+  supplierSnapshot: {
+    name: string;
+    phone: string;
+  };
+  invoiceNumber: string;
+  totals: {
+    totalUSD: number;
+    totalVES: number;
+    exchangeRate: number;
+  };
+  payment: {
+    status: "open" | "partial" | "paid";
+    paidUSD: number;
+    paidVES: number;
+    pendingUSD: number;
+    pendingVES: number;
+  };
+  issuedAt: string;
+  dueAt: string | null;
+  createdBy: string;
+}
+
+export interface Expense extends SoftDeleteFields {
+  label: string;
+  category: "fixed" | "variable" | "other";
+  amountUSD: number;
+  amountVES: number;
+  exchangeRate: number;
+  paymentMethod: PaymentMethod;
+  occurredAt: string;
+  createdBy: string;
+  notes: string;
+}
+
+export interface CampaignAudience {
+  segment: CustomerMarketing["segment"] | "all";
+  minVisitsPerMonth?: number;
+  lastVisitAfter?: string | null;
+  lastVisitBefore?: string | null;
+  minLifetimeUSD?: number;
+  maxLifetimeUSD?: number;
+  preferredItems?: string[];
+}
+
+export interface Campaign extends SoftDeleteFields {
+  name: string;
+  channel: CampaignChannel;
+  status: CampaignStatus;
+  message: string;
+  audience: CampaignAudience;
+  estimatedRecipients: number;
+  scheduledFor: string | null;
+  createdAt: string;
+  createdBy: string;
+  sentAt?: string | null;
+}
+
 export interface Product extends TimestampFields, SoftDeleteFields {
   sku: string;
   name: string;
-  category: "pulpa";
+  category: "cafe";
   flavor: string;
   unit: "kg";
   presentation: string;
@@ -227,11 +338,61 @@ export interface StockMovement extends SoftDeleteFields {
   createdBy: string;
 }
 
+export interface SaleItem {
+  menuItemId: string;
+  sku: string;
+  name: string;
+  quantity: number;
+  unitPriceUSD: number;
+  unitPriceVES: number;
+  subtotalUSD: number;
+  subtotalVES: number;
+}
+
+export interface Sale extends SoftDeleteFields {
+  invoiceNumber: string;
+  customerId: string;
+  customerSnapshot: {
+    fullName: string;
+    phone: string;
+  };
+  items: SaleItem[];
+  totals: {
+    subtotalUSD: number;
+    subtotalVES: number;
+    discountUSD: number;
+    discountVES: number;
+    taxUSD: number;
+    taxVES: number;
+    totalUSD: number;
+    totalVES: number;
+    exchangeRate: number;
+  };
+  payment: {
+    method: PaymentMethod;
+    status: PaymentStatus;
+    paidUSD: number;
+    paidVES: number;
+    pendingUSD: number;
+    pendingVES: number;
+  };
+  status: InvoiceStatus;
+  issuedAt: string;
+  createdBy: string;
+}
+
 export interface FirestoreSchema {
   users: AppUser;
   settings_general: GeneralSettings;
   settings_exchangeRate: ExchangeRateSettings;
   customers: Customer;
+  inventoryItems: InventoryItem;
+  menuItems: MenuItem;
+  sales: Sale;
+  suppliers: Supplier;
+  supplierBills: SupplierBill;
+  expenses: Expense;
+  campaigns: Campaign;
   products: Product;
   productionBatches: ProductionBatch;
   invoices: Invoice;

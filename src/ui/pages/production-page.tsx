@@ -179,6 +179,7 @@ export function ProductionPage() {
 
       const payload = buildProductionBatch({
         batchNumber,
+        productDocumentId: selectedProduct.id,
         product: selectedProduct.data as Product,
         fruitType: selectedProduct.data.flavor,
         inputWeightKg: rawFruitKgValue,
@@ -373,9 +374,9 @@ export function ProductionPage() {
               />
 
               <NumericField
-                hint="Cantidad final de pulpa util despues del proceso."
+                hint="Cantidad final de cafe util despues del proceso."
                 id={netPulpId}
-                label="Kilos de Pulpa Neta Obtenida"
+                label="Kilos de Cafe Neto Obtenido"
                 onChange={setNetPulpKg}
                 prefix="KG"
                 value={netPulpKg}
@@ -475,7 +476,7 @@ export function ProductionPage() {
                     {canCalculate ? formatCurrency(costPerNetKg) : "--"}
                   </p>
                   <p className="mt-2 text-sm text-[var(--color-ink-soft)]">
-                    Costo unitario sobre pulpa neta utilizable.
+                    Costo unitario sobre cafe neto utilizable.
                   </p>
                 </div>
               </div>

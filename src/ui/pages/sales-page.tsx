@@ -273,6 +273,7 @@ export function SalesPage() {
 
       const invoice = buildInvoice({
         invoiceNumber,
+        customerDocumentId: selectedCustomer.id,
         customer: selectedCustomer.data as Customer,
         items: [invoiceItem],
         saleType: pendingUsdPreview > 0 || pendingVesPreview > 0 ? "credit" : "cash",
@@ -283,8 +284,6 @@ export function SalesPage() {
         createdBy: user?.uid ?? "frontend_user",
         issuedAt
       });
-
-      invoice.customerId = selectedCustomer.id;
 
       await createInvoiceAndApplyEffects({
         invoiceId,
@@ -429,7 +428,7 @@ export function SalesPage() {
         </thead>
         <tbody>${itemRows}</tbody>
       </table>
-      <p class="footer">Metodo: ${escapeHtml(invoice.method)} · Estado: ${escapeHtml(invoice.status)}</p>`
+      <p class="footer">Metodo: ${escapeHtml(invoice.method)} - Estado: ${escapeHtml(invoice.status)}</p>`
     );
   }
 
@@ -478,7 +477,7 @@ export function SalesPage() {
         </thead>
         <tbody>${paymentRows}</tbody>
       </table>
-      <p class="footer">Documento generado desde Sistema de Gestion de Pulpas.</p>`
+      <p class="footer">Documento generado desde PEDAiCAFE.</p>`
     );
   }
 
@@ -902,7 +901,7 @@ export function SalesPage() {
                               <div>
                                 <p className="font-semibold text-[var(--color-ink)]">{item.name}</p>
                                 <p className="mt-1 text-sm text-[var(--color-ink-soft)]">
-                                  {item.quantity} Kg · {item.sku}
+                                  {item.quantity} Kg - {item.sku}
                                 </p>
                               </div>
                               <div className="text-right">

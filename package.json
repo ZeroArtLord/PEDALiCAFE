@@ -11,12 +11,16 @@
     "seed:firestore": "tsx scripts/seed-firestore.ts",
     "create:master-user": "tsx scripts/create-master-user.ts",
     "create:staff-user": "tsx scripts/create-staff-user.ts",
-    "backfill:soft-delete": "tsx scripts/backfill-soft-delete.ts"
+    "backfill:soft-delete": "tsx scripts/backfill-soft-delete.ts",
+    "backfill:batch-product-id": "tsx scripts/backfill-batch-product-id.ts",
+    "check:firestore": "tsx scripts/check-firestore.ts",
+    "backup:firestore": "tsx scripts/backup-firestore.ts",
+    "wipe:data": "tsx scripts/wipe-data.ts"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.87.4",
     "clsx": "^2.1.1",
-    "firebase": "^12.0.0",
+    "firebase": "^12.10.0",
     "firebase-admin": "^13.5.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

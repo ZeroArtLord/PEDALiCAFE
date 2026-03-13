@@ -338,7 +338,7 @@ export function DashboardPage() {
                         <div>
                           <p className="font-semibold text-[var(--color-ink)]">{product.name}</p>
                           <p className="mt-1 text-sm text-[var(--color-ink-soft)]">
-                            {product.current} Kg actuales · minimo {product.minimum} Kg
+                            {product.current} Kg actuales - minimo {product.minimum} Kg
                           </p>
                         </div>
                         <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-xs font-semibold text-orange-800">

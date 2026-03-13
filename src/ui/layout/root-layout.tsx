@@ -6,10 +6,13 @@ import { getUserProfile } from "../../lib/firestore.js";
 
 const navigation = [
   { to: "/", label: "Resumen", shortLabel: "Inicio" },
+  { to: "/pos", label: "POS", shortLabel: "Caja" },
   { to: "/clientes", label: "Clientes", shortLabel: "Clientes" },
   { to: "/inventario", label: "Inventario", shortLabel: "Stock" },
   { to: "/produccion", label: "Produccion", shortLabel: "Lotes" },
   { to: "/ventas", label: "Ventas", shortLabel: "Ventas" },
+  { to: "/finanzas", label: "Finanzas", shortLabel: "Finanzas" },
+  { to: "/marketing", label: "Marketing", shortLabel: "Mkt" },
   { to: "/reportes", label: "Reportes", shortLabel: "Reportes" },
   { to: "/ajustes", label: "Ajustes", shortLabel: "Admin" }
 ];
@@ -33,11 +36,11 @@ export function RootLayout() {
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/85 px-3 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-brand)]">
             <span className="pulse-dot" />
-            Pulpa ERP
+            PEDAiCAFE
           </div>
           <h1 className="mt-3 font-display text-3xl font-semibold leading-tight text-[var(--color-ink)]">
             Sistema de
-            <span className="block text-[var(--color-brand)]">Gestion de Pulpas</span>
+            <span className="block text-[var(--color-brand)]">Gestion de Cafe</span>
           </h1>
           <p className="mt-3 max-w-xs text-sm leading-6 text-[var(--color-ink-soft)]">
             Control operativo para clientes, produccion, inventario y ventas con tasa diaria USD/VES.
@@ -137,7 +140,7 @@ export function RootLayout() {
       </div>
 
       <nav className="topbar-shell glass-card fixed inset-x-4 bottom-4 z-20 rounded-[28px] px-2 py-2 lg:hidden">
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-9 gap-1">
           {navigation.map((item) => (
             <NavLink
               key={item.to}

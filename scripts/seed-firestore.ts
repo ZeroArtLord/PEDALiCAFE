@@ -66,6 +66,9 @@ async function main() {
 
   await setBatchDocuments(COLLECTIONS.users, seedData.users);
   await setBatchDocuments(COLLECTIONS.customers, seedData.customers);
+  await setBatchDocuments(COLLECTIONS.inventoryItems, seedData.inventoryItems);
+  await setBatchDocuments(COLLECTIONS.menuItems, seedData.menuItems);
+  await setBatchDocuments(COLLECTIONS.sales, seedData.sales);
   await setBatchDocuments(COLLECTIONS.products, seedData.products);
   await setBatchDocuments(COLLECTIONS.productionBatches, seedData.productionBatches);
   await setBatchDocuments(COLLECTIONS.invoices, seedData.invoices);
